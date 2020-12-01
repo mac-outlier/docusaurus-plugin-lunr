@@ -73,7 +73,7 @@ const Search = props => {
     }
 
     const [{ default: searchIndex }, autoComplete] = await Promise.all([
-      import(/* webpackChunkName: "search-index" */ '@generated/docusaurus-plugin-lunr/search-index.json'),
+      import(/* webpackChunkName: "search-index" */ '@generated/docusaurus-plugin-lunr/default/search-index.json'),
       import('autocomplete.js'),
     ]);
     const { documents, index } = searchIndex;

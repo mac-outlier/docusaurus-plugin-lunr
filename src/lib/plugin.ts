@@ -40,30 +40,19 @@ export default function pluginContentLunr(
     // tslint:disable-next-line: readonly-array
     getPathsToWatch(): string[] {
       const { include } = options;
-      const globPattern = include.map(pattern => `${docsDir}/${pattern}`);
       const versionGlobPattern = (!versioning.enabled) ? [] : flatten(
         include.map(p => versionsNames.map(v => `${versionedDir}/${v}/${p}`))
       );
-      return [...globPattern, ...versionGlobPattern];
+      return [...versionGlobPattern];
     },
 
     async loadContent(): Promise<LoadedContent> {
       const { include } = options;
 
       // tslint:disable-next-line: no-if-statement
-      if (!fs.existsSync(docsDir)) {
+      if (!await fs.exists(docsDir)) {
         return null;
       }
-
-      // Metadata for default/ master docs files.
-      const docsFiles = await globby(include, { cwd: docsDir });
-      const docsPromises = docsFiles.map(async source => processMetadata({
-        context,
-        env,
-        options,
-        refDir: docsDir,
-        source,
-      }));
 
       // Metadata for versioned docs
       const versionedGlob = flatten(include.map(p => versionsNames.map(v => `${v}/${p}`)));
@@ -76,7 +65,7 @@ export default function pluginContentLunr(
         source,
       }));
 
-      const metadata = await Promise.all([...docsPromises, ...versionPromises]);
+      const metadata = await Promise.all([...versionPromises]);
       return ({ metadata });
     },
 
@@ -96,6 +85,10 @@ export default function pluginContentLunr(
         this.field('title');
         this.field('content');
         this.field('version');
+
+        // Reference: https://github.com/olivernn/moonwalkers/blob/6d5a6e976921490033681617e92ea42e3a80eed0/build-index#L29.
+        this.metadataWhitelist = ['position']
+
         metadata.forEach(function ({ permalink, title, version, plaintext }) {
           this.add({
             content: plaintext,
@@ -110,6 +103,7 @@ export default function pluginContentLunr(
       const documents = metadata.map(({ permalink: route, title, version }) => ({ route, title, version }));
       // tslint:disable-next-line: no-expression-statement
       createData('search-index.json', JSON.stringify({ index, documents }, null, 2));
+      createData('meta.json', JSON.stringify(metadata, null, 2));
     }
   };
 };
