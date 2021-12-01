@@ -39,17 +39,18 @@ function pluginContentLunr(context, opts) {
             const { include } = options;
             // tslint:disable-next-line: no-if-statement
             if (!await fs_extra_1.default.exists(docsDir)) {
+                console.error('DOCS DIR DOES NOT EXIST')
                 return null;
             }
             // // Metadata for default/ master docs files.
-            // const docsFiles = await globby(include, { cwd: docsDir });
-            // const docsPromises = docsFiles.map(async source => processMetadata({
-            //   context,
-            //   env,
-            //   options,
-            //   refDir: docsDir,
-            //   source,
-            // }));
+            const docsFiles = await globby_1.default(include, { cwd: docsDir });
+            const docsPromises = docsFiles.map(async source => metadata_1.default({
+              context,
+              env,
+              options,
+              refDir: docsDir,
+              source,
+            }));
             // Metadata for versioned docs
             const versionedGlob = fp_1.flatten(include.map(p => versionsNames.map(v => `${v}/${p}`)));
             const versionedFiles = await globby_1.default(versionedGlob, { cwd: versionedDir });
@@ -60,8 +61,8 @@ function pluginContentLunr(context, opts) {
                 refDir: versionedDir,
                 source,
             }));
-            // const metadata = await Promise.all([...docsPromises, ...versionPromises]);
-            const metadata = await Promise.all([...versionPromises]);
+            const metadata = await Promise.all([...docsPromises, ...versionPromises]);
+            // const metadata = await Promise.all([...versionPromises]);
             return ({ metadata });
         },
         contentLoaded({ content, actions }) {
