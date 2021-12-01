@@ -67,7 +67,8 @@
     "lunr": "^2.3.8",
     "remove-markdown": "^0.3.0",
     "striptags": "^3.1.1",
-    "urijs": "^1.19.2"
+    "urijs": "^1.19.2",
+    "classnames": "^2.3.1"
   },
   "devDependencies": {
     "@bitjson/npm-scripts-info": "^1.0.0",
