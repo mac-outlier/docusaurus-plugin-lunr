@@ -87,11 +87,11 @@ const Search = props => {
       searchBarRef.current.focus();
     }
 
-    props.handleSearchBarToggle(!props.isSearchBarExpanded);
+    // props.handleSearchBarToggle(!props.isSearchBarExpanded);
   }, [props.isSearchBarExpanded, indexState]);
 
   const handleSearchInputBlur = useCallback(() => {
-    props.handleSearchBarToggle(!props.isSearchBarExpanded);
+    // props.handleSearchBarToggle(!props.isSearchBarExpanded);
   }, [props.isSearchBarExpanded]);
 
   return (
