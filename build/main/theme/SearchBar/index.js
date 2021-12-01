@@ -58,7 +58,7 @@ const Search = props => {
             templates: {
               suggestion: function (suggestion) {
                 const document = documents.find(document => document.route === suggestion.ref);
-                return autoComplete.escapeHighlightedString(document.title);
+                return autoComplete.default.escapeHighlightedString(document.title);
               },
               empty: () => {
                 return 'no results'
