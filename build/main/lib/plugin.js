@@ -48,7 +48,7 @@ function pluginContentLunr(context, opts) {
               context,
               env,
               options,
-              refDir: '/',
+              refDir: docsDir,
               source,
             }));
             // Metadata for versioned docs
