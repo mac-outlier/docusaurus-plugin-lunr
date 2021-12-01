@@ -28,9 +28,7 @@ const Search = props => {
     setIndexState('loading');
 
     const indexLoaded = (index, documents, autoComplete) => {
-      console.log(autoComplete)
-      debugger
-      autoComplete.noConflict();
+      autoComplete.default.noConflict();
 
       autoComplete.default(
         searchBarRef.current,
